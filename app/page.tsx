@@ -351,7 +351,7 @@ export default function HomePage() {
             animate={{
               scale: target.hit ? 0 : 1,
               rotate: target.hit ? 360 : 0,
-              y: target.hit ? 0 : [0, target.moveOffset, 0], // 向下移动再回来
+              y: target.hit ? 0 : [0, target.moveOffset, 0], // 上下移动
             }}
             transition={{ 
               duration: target.hit ? 0.6 : target.moveDuration,
