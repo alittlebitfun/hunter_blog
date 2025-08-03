@@ -22,6 +22,9 @@ interface TargetInterface {
   x: number
   y: number
   hit: boolean
+  moveOffset: number
+  moveDuration: number
+  moveDelay: number
 }
 
 export default function HomePage() {
@@ -39,11 +42,35 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsClient(true)
-    // 初始化靶子位置
+    // 初始化靶子位置，为每个机器人添加移动参数
     setTargets([
-      { id: 1, x: 25, y: 30, hit: false },
-      { id: 2, x: 50, y: 20, hit: false },
-      { id: 3, x: 75, y: 35, hit: false },
+      { 
+        id: 1, 
+        x: 25, 
+        y: 30, 
+        hit: false,
+        moveOffset: Math.random() * 20 + 10, // 10-30px 随机移动距离
+        moveDuration: Math.random() * 2 + 1.5, // 1.5-3.5秒 随机移动时间
+        moveDelay: Math.random() * 2 // 0-2秒 随机延迟
+      },
+      { 
+        id: 2, 
+        x: 50, 
+        y: 20, 
+        hit: false,
+        moveOffset: Math.random() * 20 + 10,
+        moveDuration: Math.random() * 2 + 1.5,
+        moveDelay: Math.random() * 2
+      },
+      { 
+        id: 3, 
+        x: 75, 
+        y: 35, 
+        hit: false,
+        moveOffset: Math.random() * 20 + 10,
+        moveDuration: Math.random() * 2 + 1.5,
+        moveDelay: Math.random() * 2
+      },
     ])
   }, [])
 
@@ -320,13 +347,19 @@ export default function HomePage() {
               top: `${target.y}%`,
               transform: "translate(-50%, -50%)",
             }}
-            initial={{ scale: 0, rotate: 0 }}
+            initial={{ scale: 0, rotate: 0, y: 0 }}
             animate={{
               scale: target.hit ? 0 : 1,
               rotate: target.hit ? 360 : 0,
+              y: target.hit ? 0 : [0, target.moveOffset, 0], // 向下移动再回来
+            }}
+            transition={{ 
+              duration: target.hit ? 0.6 : target.moveDuration,
+              delay: target.hit ? 0 : target.moveDelay,
+              repeat: target.hit ? 0 : Number.POSITIVE_INFINITY,
+              ease: "easeInOut"
             }}
             exit={{ scale: 0, rotate: 360 }}
-            transition={{ duration: 0.6 }}
           >
             <div className="relative w-28 h-32">
               {/* 敌人标识文字 */}
