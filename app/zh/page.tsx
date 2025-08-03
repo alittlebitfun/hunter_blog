@@ -32,6 +32,7 @@ export default function HomePage() {
   const [isClient, setIsClient] = useState(false)
   const router = useRouter()
   const countdownStarted = useRef(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [shotsFired, setShotsFired] = useState(0)
   const { t, locale } = useTranslation()
   const { playGunshot, playHit, playTargetDestroyed } = useSoundEffects()
@@ -57,10 +58,10 @@ export default function HomePage() {
         // 5秒后获取最终击杀数并跳转
         setTargets((currentTargets) => {
           const finalKills = currentTargets.filter((t) => t.hit).length
-          setShotsFired((currentShots) => {
+          setShotsFired((_currentShots) => {
             const bountyPath = locale === "zh" ? "/zh/bounty" : "/bounty"
-            router.push(`${bountyPath}?kills=${finalKills}&shots=${currentShots}`)
-            return currentShots
+            router.push(`${bountyPath}?kills=${finalKills}&shots=${_currentShots}`)
+            return _currentShots
           })
           return currentTargets
         })
@@ -106,8 +107,8 @@ export default function HomePage() {
         if (target.hit) return target
 
         // 调整命中判定区域，向右下方偏移
-        const targetX = (target.x / 100) * windowWidth + 50  // 向右偏移20px
-        const targetY = (target.y / 100) * windowHeight + 50 // 向下偏移30px
+        const targetX = (target.x / 100) * windowWidth + 50  // 向右偏移50px
+        const targetY = (target.y / 100) * windowHeight + 50 // 向下偏移50px
         const distance = Math.sqrt(Math.pow(clickX - targetX, 2) + Math.pow(clickY - targetY, 2))
 
         if (distance < 70) {
@@ -199,10 +200,7 @@ export default function HomePage() {
           {/* 主标题 */}
           <div className="relative">
             <h1 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-red-600 text-left tracking-wider font-mono">
-              {t("title").split(" ")[0]}
-            </h1>
-            <h1 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-red-700 text-left tracking-wider font-mono -mt-4">
-              {t("title").split(" ")[1] || ""}
+              {t("title")}
             </h1>
           </div>
 
@@ -213,12 +211,12 @@ export default function HomePage() {
             <div className="w-16 h-0.5 bg-gradient-to-l from-transparent to-red-500"></div>
           </div>
 
-          <p className="text-xl text-red-400 text-center mt-6 font-mono tracking-widest chinese-text">{t("subtitle")}</p>
+          <p className="text-xl text-red-400 text-center mt-6 font-mono tracking-widest">{t("subtitle")}</p>
         </div>
       </motion.div>
 
       {/* 左侧控制面板 */}
-      <div className="absolute left-8 top-2/3 transform -translate-y-1/2 bg-gradient-to-b from-gray-900/90 to-black/90 border-2 border-red-600/50 p-6 font-mono text-sm backdrop-blur-sm">
+      <div className="absolute left-8 top-1/2 transform -translate-y-1/2 bg-gradient-to-b from-gray-900/90 to-black/90 border-2 border-red-600/50 p-6 font-mono text-sm backdrop-blur-sm">
         <div className="relative">
           {/* 面板装饰 */}
           <div className="absolute -top-2 -left-2 w-4 h-4 border-l-2 border-t-2 border-red-500"></div>
@@ -226,27 +224,27 @@ export default function HomePage() {
           <div className="absolute -bottom-2 -left-2 w-4 h-4 border-l-2 border-b-2 border-red-500"></div>
           <div className="absolute -bottom-2 -right-2 w-4 h-4 border-r-2 border-b-2 border-red-500"></div>
 
-          <div className="flex items-center gap-2 text-red-400 mb-4 text-lg font-bold chinese-text">
+          <div className="flex items-center gap-2 text-red-400 mb-4 text-lg font-bold">
             <Gauge size={20} />
             {t("systemStatus")}
           </div>
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 chinese-text">{t("weapons")}:</span>
-              <span className="text-green-400 font-bold chinese-text">{t("online")}</span>
+              <span className="text-gray-400">{t("weapons")}:</span>
+              <span className="text-green-400 font-bold">{t("online")}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 chinese-text">{t("targeting")}:</span>
-              <span className="text-green-400 font-bold chinese-text">{t("active")}</span>
+              <span className="text-gray-400">{t("targeting")}:</span>
+              <span className="text-green-400 font-bold">{t("active")}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 chinese-text">{t("ammo")}:</span>
+              <span className="text-gray-400">{t("ammo")}:</span>
               <span className="text-yellow-400 font-bold">∞</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 chinese-text">{t("range")}:</span>
-              <span className="text-blue-400 font-bold chinese-text">{t("optimal")}</span>
+              <span className="text-gray-400">{t("range")}:</span>
+              <span className="text-blue-400 font-bold">{t("optimal")}</span>
             </div>
           </div>
 
@@ -276,14 +274,14 @@ export default function HomePage() {
         <div className="relative">
           <div className="flex items-center gap-2 text-red-400 mb-2">
             <Target size={20} />
-            <span className="text-lg font-bold chinese-text">{t("targets")}</span>
+            <span className="text-lg font-bold">{t("targets")}</span>
           </div>
           <div className="text-3xl font-black text-center">
             <span className="text-green-400">{targets.filter((t) => t.hit).length}</span>
             <span className="text-red-400 mx-2">/</span>
             <span className="text-red-400">{targets.length}</span>
           </div>
-          <div className="text-xs text-gray-400 text-center mt-1 chinese-text">{t("eliminated")}</div>
+          <div className="text-xs text-gray-400 text-center mt-1">{t("eliminated")}</div>
         </div>
       </div>
 
@@ -302,7 +300,7 @@ export default function HomePage() {
           <div className="absolute inset-16 rounded-full border border-green-200 opacity-20"></div>
 
           {/* 雷达标签 */}
-          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-green-400 font-mono text-xs chinese-text">
+          <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 text-green-400 font-mono text-xs">
             {t("radar")}
           </div>
         </div>
@@ -330,7 +328,7 @@ export default function HomePage() {
             <div className="relative w-28 h-32">
               {/* 敌人标识文字 */}
               <div className="absolute -top-8 left-1/2 transform -translate-x-1/2">
-                <div className="bg-red-600/90 text-white px-2 py-1 text-xs font-bold font-mono border border-red-500 rounded chinese-text">
+                <div className="bg-red-600/90 text-white px-2 py-1 text-xs font-bold font-mono border border-red-500 rounded">
                   {t("enemy")}
                 </div>
                 {/* 指向箭头 */}
@@ -439,105 +437,105 @@ export default function HomePage() {
           </motion.div>
         ))}
       </AnimatePresence>
-{/* 弹孔效果 */}
-<AnimatePresence>
-  {bulletHoles.map((hole) => (
-    <motion.div
-      key={hole.id}
-      className="absolute"
-      style={{
-        left: hole.x - 8,
-        top: hole.y - 8,
-      }}
-      initial={{ scale: 0, rotate: 0 }}
-      animate={{ scale: 1, rotate: 360 }}
-      exit={{ opacity: 0, scale: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div className="w-4 h-4 bg-gradient-to-br from-red-800 to-black rounded-full border border-red-600 shadow-inner"></div>
-      {/* 裂纹效果 */}
-      <div className="absolute inset-0">
-        <div className="absolute top-0 left-1/2 w-0.5 h-2 bg-red-700 transform -translate-x-1/2 -translate-y-1"></div>
-        <div className="absolute bottom-0 left-1/2 w-0.5 h-2 bg-red-700 transform -translate-x-1/2 translate-y-1"></div>
-        <div className="absolute left-0 top-1/2 w-2 h-0.5 bg-red-700 transform -translate-y-1/2 -translate-x-1"></div>
-        <div className="absolute right-0 top-1/2 w-2 h-0.5 bg-red-700 transform -translate-y-1/2 translate-x-1"></div>
-      </div>
-    </motion.div>
-  ))}
-</AnimatePresence>
 
-{/* 高级准星 */}
-<motion.div
-  className="fixed pointer-events-none z-50"
-  style={{
-    left: mousePosition.x - 40, // 80px / 2
-    top: mousePosition.y - 40,
-  }}
-  animate={{
-    scale: showMuzzleFlash ? 1.3 : 1,
-  }}
-  transition={{ duration: 0.15 }}
->
-  <div className="relative w-20 h-20">
-    {/* 外圈 - 旋转 */}
-    <motion.div
-      className="absolute inset-0 rounded-full border-2 border-red-500 opacity-60"
-      animate={{ rotate: 360 }}
-      transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
-    >
-      <div className="absolute top-0 left-1/2 w-1 h-1 bg-red-500 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 left-1/2 w-1 h-1 bg-red-500 rounded-full transform -translate-x-1/2 translate-y-1/2"></div>
-      <div className="absolute left-0 top-1/2 w-1 h-1 bg-red-500 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute right-0 top-1/2 w-1 h-1 bg-red-500 rounded-full transform translate-x-1/2 -translate-y-1/2"></div>
-    </motion.div>
+      {/* 弹孔效果 */}
+      <AnimatePresence>
+        {bulletHoles.map((hole) => (
+          <motion.div
+            key={hole.id}
+            className="absolute"
+            style={{
+              left: hole.x - 8,
+              top: hole.y - 8,
+            }}
+            initial={{ scale: 0, rotate: 0 }}
+            animate={{ scale: 1, rotate: 360 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="w-4 h-4 bg-gradient-to-br from-red-800 to-black rounded-full border border-red-600 shadow-inner"></div>
+            {/* 裂纹效果 */}
+            <div className="absolute inset-0">
+              <div className="absolute top-0 left-1/2 w-0.5 h-2 bg-red-700 transform -translate-x-0.5 -translate-y-1"></div>
+              <div className="absolute bottom-0 left-1/2 w-0.5 h-2 bg-red-700 transform -translate-x-0.5 translate-y-1"></div>
+              <div className="absolute left-0 top-1/2 w-2 h-0.5 bg-red-700 transform -translate-y-0.5 -translate-x-1"></div>
+              <div className="absolute right-0 top-1/2 w-2 h-0.5 bg-red-700 transform -translate-y-0.5 translate-x-1"></div>
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
 
-    {/* 中圈 */}
-    <div className="absolute inset-3 rounded-full border border-red-400 opacity-80"></div>
+      {/* 高级准星 */}
+      <motion.div
+        className="fixed pointer-events-none z-50"
+        style={{
+          left: mousePosition.x - 35,
+          top: mousePosition.y - 35,
+        }}
+        animate={{
+          scale: showMuzzleFlash ? 1.3 : 1,
+        }}
+        transition={{ duration: 0.15 }}
+      >
+        <div className="relative w-20 h-20">
+          {/* 外圈 - 旋转 */}
+          <motion.div
+            className="absolute inset-0 rounded-full border-2 border-red-500 opacity-60"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+          >
+            <div className="absolute top-0 left-1/2 w-1 h-1 bg-red-500 rounded-full transform -translate-x-0.5 -translate-y-0.5"></div>
+            <div className="absolute bottom-0 left-1/2 w-1 h-1 bg-red-500 rounded-full transform -translate-x-0.5 translate-y-0.5"></div>
+            <div className="absolute left-0 top-1/2 w-1 h-1 bg-red-500 rounded-full transform -translate-x-0.5 -translate-y-0.5"></div>
+            <div className="absolute right-0 top-1/2 w-1 h-1 bg-red-500 rounded-full transform translate-x-0.5 -translate-y-0.5"></div>
+          </motion.div>
 
-    {/* 十字准星 */}
-    <div className="absolute top-1/2 left-1/2 w-16 h-0.5 bg-red-500 transform -translate-x-1/2 -translate-y-1/2"></div>
-    <div className="absolute top-1/2 left-1/2 w-0.5 h-16 bg-red-500 transform -translate-x-1/2 -translate-y-1/2"></div>
+          {/* 中圈 */}
+          <div className="absolute inset-3 rounded-full border border-red-400 opacity-80"></div>
 
-    {/* 四角标记 */}
-    <div className="absolute top-2 left-2 w-3 h-3 border-l-2 border-t-2 border-red-500"></div>
-    <div className="absolute top-2 right-2 w-3 h-3 border-r-2 border-t-2 border-red-500"></div>
-    <div className="absolute bottom-2 left-2 w-3 h-3 border-l-2 border-b-2 border-red-500"></div>
-    <div className="absolute bottom-2 right-2 w-3 h-3 border-r-2 border-b-2 border-red-500"></div>
+          {/* 十字准星 */}
+          <div className="absolute top-1/2 left-4 right-4 h-0.5 bg-red-500 transform -translate-y-0.5"></div>
+          <div className="absolute left-1/2 top-4 bottom-4 w-0.5 bg-red-500 transform -translate-x-0.5"></div>
 
-    {/* 中心瞄准点 */}
-    <div className="absolute top-1/2 left-1/2 w-2 h-2 border border-red-500 rounded-full transform -translate-x-1 -translate-y-1">
-      <div className="absolute inset-0.5 bg-red-500 rounded-full"></div>
-    </div>
+          {/* 四角标记 */}
+          <div className="absolute top-2 left-2 w-3 h-3 border-l-2 border-t-2 border-red-500"></div>
+          <div className="absolute top-2 right-2 w-3 h-3 border-r-2 border-t-2 border-red-500"></div>
+          <div className="absolute bottom-2 left-2 w-3 h-3 border-l-2 border-b-2 border-red-500"></div>
+          <div className="absolute bottom-2 right-2 w-3 h-3 border-r-2 border-b-2 border-red-500"></div>
 
-    {/* 枪口闪光 */}
-    {showMuzzleFlash && (
-      <>
-        <motion.div
-          className="absolute inset-0 bg-yellow-400 rounded-full opacity-60"
-          initial={{ scale: 0 }}
-          animate={{ scale: 2.5, opacity: 0 }}
-          transition={{ duration: 0.15 }}
-        />
-        <motion.div
-          className="absolute inset-0 bg-orange-500 rounded-full opacity-40"
-          initial={{ scale: 0 }}
-          animate={{ scale: 3, opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        />
-      </>
-    )}
-  </div>
-</motion.div>
+          {/* 中心瞄准点 */}
+          <div className="absolute top-1/2 left-1/2 w-2 h-2 border border-red-500 rounded-full transform -translate-x-1 -translate-y-1">
+            <div className="absolute inset-0.5 bg-red-500 rounded-full"></div>
+          </div>
 
+          {/* 枪口闪光 */}
+          {showMuzzleFlash && (
+            <>
+              <motion.div
+                className="absolute inset-0 bg-yellow-400 rounded-full opacity-60"
+                initial={{ scale: 0 }}
+                animate={{ scale: 2.5, opacity: 0 }}
+                transition={{ duration: 0.15 }}
+              />
+              <motion.div
+                className="absolute inset-0 bg-orange-500 rounded-full opacity-40"
+                initial={{ scale: 0 }}
+                animate={{ scale: 3, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+              />
+            </>
+          )}
+        </div>
+      </motion.div>
 
       {/* 底部状态栏 */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex items-center gap-8 font-mono text-sm">
         <div className="flex items-center gap-2 text-red-400">
           <Zap size={16} />
-          <span className="chinese-text">{t("soundBang")}</span>
+          <span>{t("soundBang")}</span>
         </div>
         <div className="text-gray-400">|</div>
-        <div className="text-yellow-400 chinese-text">{t("readyToFire")}</div>
+        <div className="text-yellow-400">{t("readyToFire")}</div>
       </div>
     </div>
   )
