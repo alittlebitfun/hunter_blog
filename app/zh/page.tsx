@@ -49,7 +49,7 @@ export default function HomePage() {
         x: 25, 
         y: 30, 
         hit: false,
-        moveOffset: Math.random() * 20 + 10, // 10-30px 随机移动距离
+        moveOffset: Math.random() * 40 + 140, // 140-180px 随机移动距离
         moveDuration: Math.random() * 2 + 1.5, // 1.5-3.5秒 随机移动时间
         moveDelay: Math.random() * 2 // 0-2秒 随机延迟
       },
@@ -58,7 +58,7 @@ export default function HomePage() {
         x: 50, 
         y: 20, 
         hit: false,
-        moveOffset: Math.random() * 20 + 10,
+        moveOffset: Math.random() * 40 + 140, // 140-180px 随机移动距离
         moveDuration: Math.random() * 2 + 1.5,
         moveDelay: Math.random() * 2
       },
@@ -67,7 +67,7 @@ export default function HomePage() {
         x: 75, 
         y: 35, 
         hit: false,
-        moveOffset: Math.random() * 20 + 10,
+        moveOffset: Math.random() * 40 + 140, // 140-180px 随机移动距离
         moveDuration: Math.random() * 2 + 1.5,
         moveDelay: Math.random() * 2
       },
@@ -133,9 +133,31 @@ export default function HomePage() {
       const newTargets = targets.map((target) => {
         if (target.hit) return target
 
-        // 调整命中判定区域，向右下方偏移
-        const targetX = (target.x / 100) * windowWidth + 50  // 向右偏移50px
-        const targetY = (target.y / 100) * windowHeight + 50 // 向下偏移50px
+        // 计算机器人当前的实际位置（考虑移动动画）
+        const baseX = (target.x / 100) * windowWidth
+        const baseY = (target.y / 100) * windowHeight
+        
+        // 获取当前动画进度来计算实际位置
+        const currentTime = Date.now()
+        const animationStartTime = currentTime - (currentTime % (target.moveDuration * 1000))
+        const elapsedTime = (currentTime - animationStartTime) / 1000
+        const normalizedTime = (elapsedTime + target.moveDelay) % target.moveDuration
+        
+        // 使用与 Framer Motion 相同的动画逻辑
+        let currentYOffset = 0
+        if (normalizedTime < target.moveDuration / 2) {
+          // 向下移动阶段
+          const progress = normalizedTime / (target.moveDuration / 2)
+          currentYOffset = target.moveOffset * progress
+        } else {
+          // 向上移动阶段
+          const progress = (normalizedTime - target.moveDuration / 2) / (target.moveDuration / 2)
+          currentYOffset = target.moveOffset * (1 - progress)
+        }
+        
+        // 调整命中判定区域，跟随机器人移动
+        const targetX = baseX + 50  // 向右偏移50px
+        const targetY = baseY + 50 + currentYOffset // 向下偏移50px + 当前移动偏移
         const distance = Math.sqrt(Math.pow(clickX - targetX, 2) + Math.pow(clickY - targetY, 2))
 
         if (distance < 70) {
