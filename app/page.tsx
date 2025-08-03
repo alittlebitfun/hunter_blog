@@ -32,6 +32,7 @@ export default function HomePage() {
   const [isClient, setIsClient] = useState(false)
   const router = useRouter()
   const countdownStarted = useRef(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [shotsFired, setShotsFired] = useState(0)
   const { t, locale } = useTranslation()
   const { playGunshot, playHit, playTargetDestroyed } = useSoundEffects()
