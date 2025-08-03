@@ -157,7 +157,11 @@ export default function HomePage() {
   )
 
   if (!isClient) {
-    return null
+    return (
+      <div className="min-h-screen bg-black text-red-500 flex items-center justify-center">
+        <div className="text-2xl font-mono">加载中...</div>
+      </div>
+    )
   }
 
   return (

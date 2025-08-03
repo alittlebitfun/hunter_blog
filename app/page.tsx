@@ -157,7 +157,11 @@ export default function HomePage() {
   )
 
   if (!isClient) {
-    return null
+    return (
+      <div className="min-h-screen bg-black text-red-500 flex items-center justify-center">
+        <div className="text-2xl font-mono">Loading...</div>
+      </div>
+    )
   }
 
   return (
@@ -347,7 +351,7 @@ export default function HomePage() {
               top: `${target.y}%`,
               transform: "translate(-50%, -50%)",
             }}
-            initial={{ scale: 0, rotate: 0, y: 0 }}
+            initial={{ scale: 1, rotate: 0, y: 0 }}
             animate={{
               scale: target.hit ? 0 : 1,
               rotate: target.hit ? 360 : 0,
