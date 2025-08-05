@@ -8,6 +8,7 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38B2AC?style=for-the-badge&logo=tailwind-css)
 
 ## ✨ 博客特色
+在线体验地址：https://hunter-blog-eight.vercel.app/
 
 ### 🎮 开屏射击体验
 - **精准射击** - 使用鼠标瞄准并点击射击机器人目标
